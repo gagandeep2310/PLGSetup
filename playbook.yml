@@ -10,13 +10,13 @@
   
 
   - name : Start grafana server
-    command : ./grafana-8.0.3/bin/grafana-server --config=configs/grafana_custom_config.ini &
+    command : cd grafana-8.0.3/bin && ./grafana-server --config=../../configs/grafana_custom_config.ini &
 
   - name : Download promtail and loki
-    command: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
+    command: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && wget https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
 
   - name : Unzip loki and make it executable
-    command: unzip loki-linux-amd64.zip && chmod a+x promtail-linux-amd64.zip
+    command: unzip loki-linux-amd64.zip && chmod a+x loki-linux-amd64.zip
   
   - name : Unzip promtails and make it executable
     command : unzip promtail-linux-amd64.zip && chmod a+x promtail-linux-amd64.zip
@@ -25,7 +25,7 @@
     command : ./loki-linux-amd64 --config.file=configs/loki-local-config.yaml &
 
   - name : Run promtails
-    command : ./promtail-linux-amd64.zip && chmod a+x 
+    command : ./promtail-linux-amd64.zip &
 
   
 
