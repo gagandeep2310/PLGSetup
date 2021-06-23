@@ -17,7 +17,6 @@ scrape_configs:
     labels:
       __path__: './logs/*/*logs'
       job: logs2
-      service: logs2
   pipeline_stages:
   - match:
       selector: '{job="logs2"}'
