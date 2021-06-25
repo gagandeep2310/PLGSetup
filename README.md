@@ -20,6 +20,8 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
 - Go to http://localhost:9081 to check promtails server
 
+- Follow https://docs.google.com/document/d/1Uw6PXfhlWUlE5SIOI4qm_yI9xnm95ejuoWWuxJCYc80/edit# to add loki as a Data Source
+
 
 Using the demo logging service by using 
 
