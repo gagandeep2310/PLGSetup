@@ -14,7 +14,11 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
   `ansible-playbook playbook.yml`-K
 
-- You should be able to navigate to http://<your_ip>//3004 and access the grafana web application
+- You should be able to navigate to http://localhost:3004 and access the grafana web application
+
+- To check if loki is running navigate to http://localhost:3100/metrics , if you are able to connect then its running fine
+
+- Go to http://localhost:9081 to check promtails server
 
 
 Using the demo logging service by using 
