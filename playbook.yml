@@ -24,9 +24,7 @@
   - debug : 
       var : output
 
-  - name : Install Grafana
-    command : dpkg -i grafana_8.0.3_amd64.deb
-    register :  output
+
 
   - debug :
       var : output
