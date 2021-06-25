@@ -7,7 +7,7 @@
 
   tasks:
   - name: Install Grafana
-  - apt :
+    apt :
       name : apt-transport-https
   
   - apt :
