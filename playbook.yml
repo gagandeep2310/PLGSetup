@@ -97,6 +97,13 @@
   - debug : 
       var :  output
 
+  - name : Install Docker Driver
+    shell : docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+    register : output
+    
+  - debug : 
+      var :  output
+
     
   
   
