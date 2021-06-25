@@ -15,11 +15,11 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      __path__: './logs/*/*logs'
-      job: logs2
+      __path__: '/var/logs/*/*logs'
+      job: logs
   pipeline_stages:
   - match:
-      selector: '{job="logs2"}'
+      selector: '{job="logs"}'
       stages:
       - regex:
           source: filename

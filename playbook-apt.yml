@@ -18,12 +18,12 @@
   - name : Replace default grafana config
     shell : cat configs/grafana_custom_config.ini > /etc/grafana/grafana.ini
 
-  #   Does not work on Docker
-  # - name : Enable Grafana as a servcie
-  #   command : systemctl enable grafana-server.service
+  
+  - name : Enable Grafana as a servcie
+    command : systemctl enable grafana-server.service
 
-  # - name : Start Grafana server 
-  #   command : service grafana-server start
+  - name : Start Grafana server 
+    command : service grafana-server start
 
   - name : Download promtail and loki
     shell: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && wget https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
@@ -54,36 +54,37 @@
   - name : Copy Configurations
     copy : 
       src: ./configs/loki-local-config.yaml 
-      dest : /usr/local/bin/loki-local-config.yaml 
+      dest : /usr/local/bin/loki-local-config.yml 
       
   - copy :
-      src : promtail-local-config.yaml
-      dest :  /usr/local/bin/promtail-local-config.yaml
+      src : configs/promtail-local-config.yaml
+      dest :  /usr/local/bin/promtail-local-config.yml
 
-  # - name : Configure Loki and promtail as a system service
-  #   copy : 
-  #     src : ./configs/loki.service
-  #     dest : /etc/systemd/system/loki.service
+  - copy : 
+      src : ./configs/loki.service
+      dest : /etc/systemd/system/loki.service
+    
+  - copy : 
+      src : ./configs/promtail.service
+      dest : /etc/systemd/system/promtail.service
+
+  - name : Enable loki and promtail at startup
+    shell : systemctl enable loki.service && systemctl enable promtail.service
+    register : output
+    
+
+  - debug : 
+      var :  output
+
+  - name : Start loki and promtails
+    shell : service promtail start && service loki start
+    register : output
+    
+  - debug : 
+      var :  output
+
+    
   
-  # - copy : 
-  #     src : ./configs/promtail.service
-  #     dest : /etc/systemd/system/promtail.service
-
-  # - name : Run Loki server
-  #   shell : ./loki-linux-amd64 --config.file=configs/loki-local-config.yaml </dev/null >./logs/loki/loki.logs 2>&1 & sleep 1
-  #   register : output
-
-  # - debug : 
-  #     var : output
-
-  # - name : Run promtails
-  #   raw : "./promtail-linux-amd64 -config.file=configs/promtail-local-config.yaml </dev/null >./logs/promtail/promtail.logs 2>&1 & sleep 1"
-    
-  #   register : output
-    
-
-  # - debug : 
-  #     var :  output
   
   
   
