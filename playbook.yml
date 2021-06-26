@@ -90,8 +90,26 @@
   - debug : 
       var :  output
 
+## If we are inside docker start the services manually , else use the service command
   - name : Start loki and promtails
     shell : service promtail start && service loki start
+    when :
+      - ansible_facts['virtualization_type'] != "docker"
+    register : output
+
+  - name : Start loki 
+    raw : /usr/local/bin/loki-linux-amd64 --config.file /usr/local/bin/loki-local-config.yml & sleep 1
+    when :
+      - ansible_facts['virtualization_type'] == "docker"
+    register : output
+    
+  - debug : 
+      var :  output
+  
+  - name : Start promtail 
+    raw : /usr/local/bin/promtail-linux-amd64 --config.file /usr/local/bin/promtail-local-config.yml & sleep 1
+    when :
+      - ansible_facts['virtualization_type'] == "docker"
     register : output
     
   - debug : 
