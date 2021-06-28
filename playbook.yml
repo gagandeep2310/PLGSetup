@@ -100,13 +100,13 @@
   - name : Start loki and promtails
     shell : service promtail start && service loki start
     when :
-      - ansible_facts['virtualization_type'] != "docker"
+      - ansible_facts['virtualization_type'] != "docker"  and ansible_facts['virtualization_type'] != "containerd" 
     register : output
 
   - name : Start loki 
     raw : /usr/local/bin/loki-linux-amd64 --config.file /usr/local/bin/loki-local-config.yml & sleep 1
     when :
-      - ansible_facts['virtualization_type'] == "docker"
+      - ansible_facts['virtualization_type'] == "docker"  or ansible_facts['virtualization_type'] == "containerd" 
     register : output
     
   - debug : 
@@ -115,7 +115,7 @@
   - name : Start promtail 
     raw : /usr/local/bin/promtail-linux-amd64 --config.file /usr/local/bin/promtail-local-config.yml & sleep 1
     when :
-      - ansible_facts['virtualization_type'] == "docker"
+      - ansible_facts['virtualization_type'] == "docker" or ansible_facts['virtualization_type'] == "containerd" 
     register : output
     
   - debug : 
