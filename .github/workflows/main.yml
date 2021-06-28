@@ -11,12 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: molecule_demo
+          path: ${{ github.workspace }}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - run : ls ${{ github.workspace }}
+      - run : ls 
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
