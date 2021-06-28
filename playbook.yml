@@ -1,9 +1,5 @@
 ---
-- hosts: localhost
-  become : yes
-  vars:
-    grafana_port: 3004
-    loki_port : 3100
+- hosts: all
 
   tasks:
   - name: Install Grafana
@@ -30,7 +26,9 @@
       var : output
 
   - name : Replace default grafana config
-    shell : cat configs/grafana_custom_config.ini > /etc/grafana/grafana.ini
+    template : 
+      src :  configs/grafana_custom_config.ini 
+      dest : /etc/grafana/grafana.ini
 
   
   - name : Enable Grafana as a servcie
@@ -38,6 +36,11 @@
 
   - name : Start Grafana server 
     command : service grafana-server start
+
+  - name: Creates directory
+    file:
+      path: /usr/local/bin
+      state: directory
 
   - name : Download promtail and loki
     shell: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && wget https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
@@ -66,19 +69,19 @@
     register : output
 
   - name : Copy Configurations
-    copy : 
+    template : 
       src: ./configs/loki-local-config.yaml 
       dest : /usr/local/bin/loki-local-config.yml 
       
-  - copy :
+  - template :
       src : configs/promtail-local-config.yaml
       dest :  /usr/local/bin/promtail-local-config.yml
 
-  - copy : 
+  - template : 
       src : ./configs/loki.service
       dest : /etc/systemd/system/loki.service
     
-  - copy : 
+  - template : 
       src : ./configs/promtail.service
       dest : /etc/systemd/system/promtail.service
 
@@ -90,7 +93,7 @@
   - debug : 
       var :  output
 
-## If we are inside docker start the services manually , else use the service command
+# If we are inside docker start the services manually , else use the service command
   - name : Start loki and promtails
     shell : service promtail start && service loki start
     when :
@@ -115,13 +118,11 @@
   - debug : 
       var :  output
 
-  - name : Install Docker Driver
-    shell : docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
-    register : output
+  
     
   - debug : 
       var :  output
-
+    
     
   
   

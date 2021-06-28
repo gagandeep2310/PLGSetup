@@ -1,0 +1,19 @@
+---
+- name: Verify
+  hosts: all
+
+  tasks:
+  - name: Verify Grafana is serving web requests.
+    uri:
+      url: http://localhost:3004/
+      status_code: 200
+
+  - name: Verify Loki is working fine
+    uri:
+      url: http://localhost:3100/metrics
+      status_code: 200
+  
+  - name: Verify Promtail is working fine
+    uri:
+      url: http://localhost:9081
+      status_code: 200

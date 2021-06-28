@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: "ubuntu-ansible"
+    command: "tail -f /dev/null"
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+scenario : 
+  name : default
+  test_sequence:
+      - dependency
+      - lint
+      - cleanup
+      - destroy
+      - syntax
+      - create
+      - prepare
+      - converge
+      - side_effect
+      - verify
+      - cleanup
+      - destroy
