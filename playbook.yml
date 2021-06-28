@@ -2,6 +2,9 @@
 - hosts: all
 
   tasks:
+  - name : system information
+    debug : 
+      var : ansible_facts
   - name: Install Grafana
     apt :
       name : apt-transport-https
