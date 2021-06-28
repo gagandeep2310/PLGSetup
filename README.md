@@ -10,9 +10,9 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
   `pip install -r requirements.txt`
   
-- Run the ansible playbook
+- Installing the PLG stack using ansible-playbook
 
-  `ansible-playbook playbook.yml`-K
+  `ansible-playbook -i ansible_hosts playbook.yml`-K
 
 - You should be able to navigate to http://localhost:3004 and access the grafana web application
 
@@ -22,6 +22,9 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
 - Follow https://docs.google.com/document/d/1Uw6PXfhlWUlE5SIOI4qm_yI9xnm95ejuoWWuxJCYc80/edit# to add loki as a Data Source
 
+- Testing
+
+  `molecule test`
 
 Using the demo logging service by using 
 
