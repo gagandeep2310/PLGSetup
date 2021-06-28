@@ -1,8 +1,8 @@
 # PLGSetup
 
-This repo can be used to setup PLG stack on any machine. Follow the below steps 
+## Setting Dependencues
 
-- Create a conda virtual environment 
+- If you want to install dependencies inside a virtual environment  
 
   `$ conda create --name <env> --file spec-file.txt`
   
@@ -10,9 +10,11 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
   `pip install -r requirements.txt`
   
-- Installing the PLG stack using ansible-playbook
+## Installing Stack 
 
-  `ansible-playbook -i ansible_hosts playbook.yml`-K
+- Installing the PLG stack using ansible-playbook or use the Install.sh script
+
+  `ansible-playbook -i ansible_hosts playbook.yml K`
 
 - You should be able to navigate to http://localhost:3004 and access the grafana web application
 
@@ -22,9 +24,11 @@ This repo can be used to setup PLG stack on any machine. Follow the below steps
 
 - Follow https://docs.google.com/document/d/1Uw6PXfhlWUlE5SIOI4qm_yI9xnm95ejuoWWuxJCYc80/edit# to add loki as a Data Source
 
-- Testing
+## Testing
 
   `molecule test`
+
+## Demo logs 
 
 Using the demo logging service by using 
 
