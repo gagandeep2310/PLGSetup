@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: "ubuntu-ansible"
+    image: "gagandeep2310/ubuntuforplg"
     command: "tail -f /dev/null"
     pre_build_image: true
 provisioner:
