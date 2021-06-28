@@ -1,130 +1,133 @@
 ---
 - hosts: all
-
+  become : yes
   tasks:
-  - name : system information
-    debug : 
-      var : ansible_facts
-  - name: Install Grafana
-    apt :
-      name : apt-transport-https
-  
-  - apt :
-      name : software-properties-common
-  
-  - shell : wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
-  - shell : echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
-  
-  - name : "Install grafana"
-    apt :
-      name : grafana
-      update_cache : yes
-    register: output
-  - debug : 
-      var : output
-
-
-
-  - debug :
-      var : output
-
-  - name : Replace default grafana config
-    template : 
-      src :  configs/grafana_custom_config.ini 
-      dest : /etc/grafana/grafana.ini
-
-  
-  - name : Enable Grafana as a servcie
-    command : systemctl enable grafana-server.service
-
-  - name : Start Grafana server 
-    command : service grafana-server start
-
-  - name: Creates directory
-    file:
-      path: /usr/local/bin
-      state: directory
-
-  - name : Download promtail and loki
-    shell: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && wget https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
-    args : 
-      chdir : /usr/local/bin
+  - name : test
+    shell : ls 
     register : output
-
+  
   - debug : 
-      var : output
+      var : ouput
+#   - name: Install Grafana
+#     apt :
+#       name : apt-transport-https
+  
+#   - apt :
+#       name : software-properties-common
+  
+#   - shell : wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+#   - shell : echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+  
+#   - name : "Install grafana"
+#     apt :
+#       name : grafana
+#       update_cache : yes
+#     register: output
+#   - debug : 
+#       var : output
 
-  - name : Unzip loki and make it executable
-    args : 
-      chdir : /usr/local/bin
-    shell: unzip loki-linux-amd64.zip && chmod a+x loki-linux-amd64.zip
-    args : 
-      chdir : /usr/local/bin
-    register : output
 
-  - debug : 
-      var : output
 
-  - name : Unzip promtails and make it executable
-    shell : unzip promtail-linux-amd64.zip && chmod a+x promtail-linux-amd64.zip
-    args : 
-      chdir : /usr/local/bin
-    register : output
+#   - debug :
+#       var : output
 
-  - name : Copy Configurations
-    template : 
-      src: ./configs/loki-local-config.yaml 
-      dest : /usr/local/bin/loki-local-config.yml 
+#   - name : Replace default grafana config
+#     template : 
+#       src :  configs/grafana_custom_config.ini 
+#       dest : /etc/grafana/grafana.ini
+
+  
+#   - name : Enable Grafana as a servcie
+#     command : systemctl enable grafana-server.service
+
+#   - name : Start Grafana server 
+#     command : service grafana-server start
+
+#   - name: Creates directory
+#     file:
+#       path: /usr/local/bin
+#       state: directory
+
+#   - name : Download promtail and loki
+#     shell: wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip && wget https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip
+#     args : 
+#       chdir : /usr/local/bin
+#     register : output
+
+#   - debug : 
+#       var : output
+
+#   - name : Unzip loki and make it executable
+#     args : 
+#       chdir : /usr/local/bin
+#     shell: unzip loki-linux-amd64.zip && chmod a+x loki-linux-amd64.zip
+#     args : 
+#       chdir : /usr/local/bin
+#     register : output
+
+#   - debug : 
+#       var : output
+
+#   - name : Unzip promtails and make it executable
+#     shell : unzip promtail-linux-amd64.zip && chmod a+x promtail-linux-amd64.zip
+#     args : 
+#       chdir : /usr/local/bin
+#     register : output
+
+#   - name : Copy Configurations
+#     template : 
+#       src: ./configs/loki-local-config.yaml 
+#       dest : /usr/local/bin/loki-local-config.yml 
       
-  - template :
-      src : configs/promtail-local-config.yaml
-      dest :  /usr/local/bin/promtail-local-config.yml
+#   - template :
+#       src : configs/promtail-local-config.yaml
+#       dest :  /usr/local/bin/promtail-local-config.yml
 
-  - template : 
-      src : ./configs/loki.service
-      dest : /etc/systemd/system/loki.service
+#   - template : 
+#       src : ./configs/loki.service
+#       dest : /etc/systemd/system/loki.service
     
-  - template : 
-      src : ./configs/promtail.service
-      dest : /etc/systemd/system/promtail.service
+#   - template : 
+#       src : ./configs/promtail.service
+#       dest : /etc/systemd/system/promtail.service
 
-  - name : Enable loki and promtail at startup
-    shell : systemctl enable loki.service && systemctl enable promtail.service
-    register : output
+#   - name : Enable loki and promtail at startup
+#     shell : systemctl enable loki.service && systemctl enable promtail.service
+#     register : output
     
 
-  - debug : 
-      var :  output
+#   - debug : 
+#       var :  output
 
-# If we are inside docker start the services manually , else use the service command
-  - name : Start loki and promtails
-    shell : service promtail start && service loki start
-    when :
-      - ansible_facts['virtualization_type'] != "docker"  and ansible_facts['virtualization_type'] != "containerd" 
-    register : output
+# # If we are inside docker start the services manually , else use the service command
+#   - name : Start loki and promtails
+#     shell : service promtail start && service loki start
+#     when :
+#       - ansible_facts['virtualization_type'] != "docker"  and ansible_facts['virtualization_type'] != "containerd" 
+#     register : output
 
-  - name : Start loki 
-    raw : /usr/local/bin/loki-linux-amd64 --config.file /usr/local/bin/loki-local-config.yml & sleep 1
-    when :
-      - ansible_facts['virtualization_type'] == "docker"  or ansible_facts['virtualization_type'] == "containerd" 
-    register : output
+#   - name : Start loki 
+#     raw : /usr/local/bin/loki-linux-amd64 --config.file /usr/local/bin/loki-local-config.yml & sleep 1
+#     when :
+#       - ansible_facts['virtualization_type'] == "docker"  or ansible_facts['virtualization_type'] == "containerd" 
+#     register : output
     
-  - debug : 
-      var :  output
+#   - debug : 
+#       var :  output
   
-  - name : Start promtail 
-    raw : /usr/local/bin/promtail-linux-amd64 --config.file /usr/local/bin/promtail-local-config.yml & sleep 1
-    when :
-      - ansible_facts['virtualization_type'] == "docker" or ansible_facts['virtualization_type'] == "containerd" 
-    register : output
+#   - name : Start promtail 
+#     raw : /usr/local/bin/promtail-linux-amd64 --config.file /usr/local/bin/promtail-local-config.yml & sleep 1
+#     when :
+#       - ansible_facts['virtualization_type'] == "docker" or ansible_facts['virtualization_type'] == "containerd" 
+#     register : output
     
-  - debug : 
-      var :  output
+#   - debug : 
+#       var :  output
 
   
     
-  - debug : 
-      var :  output
+#   - debug : 
+#       var :  output
     
     
   
